@@ -1,7 +1,9 @@
 #!/bin/sh
 #
-/sbin/start-stop-daemon -S -b -n dreamciplus0 -x /usr/bin/dreamciplus -- /dev/ci0
-/sbin/start-stop-daemon -S -b -n dreamciplus1 -x /usr/bin/dreamciplus -- /dev/ci1
+if [ -e /sbin/start-stop-daemon ] ; then
+	/sbin/start-stop-daemon -S -b -n dreamciplus0 -x /usr/bin/dreamciplus -- /dev/ci0
+	/sbin/start-stop-daemon -S -b -n dreamciplus1 -x /usr/bin/dreamciplus -- /dev/ci1
+fi
 #
 # stopping of both daemons
 #
