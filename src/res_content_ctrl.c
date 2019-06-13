@@ -464,7 +464,7 @@ static bool certificate_validate(struct cert_ctx *ctx, X509 *cert)
 
 	if (ret != 1)
 		{
-		if (debug > 0) lprintf("%s\n", X509_verify_cert_error_string(store_ctx->error));
+		if (debug > 0) lprintf("%s\n", X509_verify_cert_error_string(X509_STORE_CTX_get_error(store_ctx)));
 		}
 
 	X509_STORE_CTX_free(store_ctx);
