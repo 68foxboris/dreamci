@@ -2,7 +2,7 @@ STATIC = -static
 # change for embedded certificates
 DFLAG=EMBEDDED
 
-LDLIBS = -Wl,--gc-sections,--strip-all,--discard-all -Os $(STATIC) -lcrypto
+LDLIBS = -Wl,--gc-sections,--strip-all,--discard-all -Os $(STATIC) -lcrypto -pthread
 CFLAGS = -Wall -Os -fPIC $(STATIC) -D $(DFLAG) \
 	-fdata-sections -ffunction-sections -fno-exceptions
 

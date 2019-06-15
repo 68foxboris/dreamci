@@ -142,7 +142,7 @@ LBL_ERR:
 
 /* DH */
 
-int dh_gen_exp(uint8_t *dest, int dest_len, uint8_t *dh_g, int dh_g_len, uint8_t *dh_p, int dh_p_len)
+int dh_gen_exp(uint8_t *dest, int dest_len, uint8_t *dh_g, int dh_g_len, uint8_t *dh_p, int dh_p_len, uint8_t *dh_q, int dh_q_len)
 {
 	DH *dh;
 	int len;
@@ -150,13 +150,21 @@ int dh_gen_exp(uint8_t *dest, int dest_len, uint8_t *dh_g, int dh_g_len, uint8_t
 
 	dh = DH_new();
 
-	dh->p = BN_bin2bn(dh_p, dh_p_len, 0);
-	dh->g = BN_bin2bn(dh_g, dh_g_len, 0);
-	dh->flags |= DH_FLAG_NO_EXP_CONSTTIME;
+	BIGNUM *p, *g, *q;
+	const BIGNUM *pub_key, *priv_key;
+
+	p = BN_bin2bn(dh_p, sizeof(dh_p), 0);
+	g = BN_bin2bn(dh_g, sizeof(dh_g), 0);
+	q = BN_bin2bn(dh_q, sizeof(dh_q), 0);
+	// Deprecated!   dh->flags |= DH_FLAG_NO_EXP_CONSTTIME;
+
+	DH_set0_pqg(dh, p, q, g);
 
 	DH_generate_key(dh);
 
-	len = BN_num_bytes(dh->priv_key);
+	DH_get0_key(dh, &pub_key, &priv_key);
+
+	len = BN_num_bytes(priv_key);
 	if (len > dest_len) {
 		if (debug > 9) lprintf("len > dest_len\n");
 		return -1;
@@ -164,7 +172,7 @@ int dh_gen_exp(uint8_t *dest, int dest_len, uint8_t *dh_g, int dh_g_len, uint8_t
 
 	gap = dest_len - len;
 	memset(dest, 0, gap);
-	BN_bn2bin(dh->priv_key, &dest[gap]);
+	BN_bn2bin(priv_key, &dest[gap]);
 
 	DH_free(dh);
 

@@ -1123,7 +1123,7 @@ static int restart_dh_challenge(struct cc_ctrl_data *cc_data)
 	element_invalidate(cc_data, 22); /* this will refuse a unknown cam */
 
 	/* new dh_exponent */
-	dh_gen_exp(cc_data->dh_exp, 256, dh_g, sizeof(dh_g), dh_p, sizeof(dh_p));
+	dh_gen_exp(cc_data->dh_exp, 256, dh_g, sizeof(dh_g), dh_p, sizeof(dh_p), dh_q, sizeof(dh_q));
 
 	/* new DHPH  - DHPH = dh_g ^ dh_exp % dh_p */
 	dh_mod_exp(dhph, sizeof(dhph), dh_g, sizeof(dh_g), dh_p, sizeof(dh_p), cc_data->dh_exp, 256);
