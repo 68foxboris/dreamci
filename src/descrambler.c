@@ -9,6 +9,8 @@
 #include <errno.h>
 #include <sys/file.h>
 
+#define CA_SET_PID        _IOW('o', 135, struct ca_pid)
+
 extern void lprintf(char* message,...);
 extern void return_ci(int sig);
 extern char *dreambox;
@@ -47,6 +49,11 @@ struct ca_descr_s {
 	unsigned int index;
 	unsigned int parity;
 	unsigned char cw[8];
+};
+
+struct ca_pid {
+	unsigned int pid;
+	int index;		/* -1 == disable*/
 };
 
 #define CA_SET_DESCR_DATA_DREAM _IOW('o', 137, struct ca_descr_data)
